@@ -1,6 +1,6 @@
 import os
 from flask import (
-  Flask, render_template,
+  Flask, render_template, abort,
   request, redirect, jsonify)
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
@@ -35,10 +35,15 @@ def create_app(test_config=None):
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
-  @app.route('/api', methods=['GET'])
-  def api():
-    return render_template('index.html')
-
+  @app.route('/categories')
+  def categories():
+    
+    formatted_categories = [category.format() for category in Category.query.all()]
+    
+    return jsonify({
+      'success': True,
+      'categories':formatted_categories
+      })
 
   '''
   @TODO: 
@@ -52,7 +57,22 @@ def create_app(test_config=None):
   ten questions per page and pagination at the bottom of the screen for three pages.
   Clicking on the page numbers should update the questions. 
   '''
+  @app.route('/questions')
+  def questions():
+    #* Implement pagniation
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * 10
+    end = start + 10
 
+    formatted_questions = [question.format() for question in Question.query.all()]
+
+    return jsonify({
+      'success': True,
+      'questions':formatted_questions[start:end],
+      'totalQuestions': len(formatted_questions),
+      'categories': [category.type for category in Category.query.all()],
+     #! 'currentCategory': ques
+      })
   '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
@@ -106,11 +126,57 @@ def create_app(test_config=None):
   '''
 
   '''
-  @TODO: 
+  ✅@TODO: 
   Create error handlers for all expected errors 
   including 404 and 422. 
   '''
-  
+  @app.errorhandler(400)
+  #? indicates that the server cannot or will not process the request
+  #? due to something that is perceived to be a client error 
+  def bad_request(error):
+      return jsonify({
+          "success": False, 
+          "error": 400,
+          "message": "Bad request"
+          }), 400
+
+  @app.errorhandler(404)
+  def not_found(error):
+      return jsonify({
+          "success": False, 
+          "error": 404,
+          "message": "Not found"
+          }), 404
+
+  @app.errorhandler(405)
+  #? indicates that the request method is known by the server but is
+  #? not supported by the target resource.
+  def method_not_allowed(error):
+      return jsonify({
+          "success": False, 
+          "error": 405,
+          "message": "Method not allowed"
+          }), 405
+
+  @app.errorhandler(422)
+  #? indicates that the server understands the content type of the request
+  #? entity, and the syntax of the request entity is correct, but it was
+  #? unable to process the contained instructions.
+  def unprocessable_entity(error):
+      return jsonify({
+          "success": False, 
+          "error": 422,
+          "message": "Unprocessable entity"
+          }), 422
+
+  @app.errorhandler(500)
+  def internal_server_error(error):
+      return jsonify({
+          "success": False, 
+          "error": 500,
+          "message": "Internal server error"
+          }), 500
+#* Status Code Source: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
   return app
 
     
