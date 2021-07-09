@@ -4,7 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 database_name = "trivia"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+#* To restore a database using the trivia.psql file in my local machine, i configured the following line to match the user name & password.
+#database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+database_path = "postgresql://postgres:postgres@{}/{}".format('localhost:5432', database_name)
 
 db = SQLAlchemy()
 

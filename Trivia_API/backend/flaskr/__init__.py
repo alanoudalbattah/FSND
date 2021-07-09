@@ -1,7 +1,9 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import (
+  Flask, render_template,
+  request, redirect, jsonify)
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import random
 
 from models import setup_db, Question, Category
@@ -14,18 +16,28 @@ def create_app(test_config=None):
   setup_db(app)
   
   '''
-  @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+  ✅@TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
   '''
-
+  CORS(app, resources={r"/api/*": {"origins": "*"}})
   '''
-  @TODO: Use the after_request decorator to set Access-Control-Allow
+  ✅@TODO: Use the after_request decorator to set Access-Control-Allow
   '''
-
+  #? Access-Control-Allow-Origin: What client domains can access its resources. For any domain use *
+  #? Access-Control-Allow-Credentials: Only if using cookies for authentication - in which case its value must be true
+  #? Access-Control-Allow-Methods: List of HTTP request types allowed
+  #? Access-Control-Allow-Headers: List of http request header values the server will allow, particularly useful if you use any custom headers
+  @app.after_request
+  def after_request(res):
+      res.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+      return res
   '''
-  @TODO: 
+  ✅@TODO: 
   Create an endpoint to handle GET requests 
   for all available categories.
   '''
+  @app.route('/api', methods=['GET'])
+  def api():
+    return render_template('index.html')
 
 
   '''
