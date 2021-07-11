@@ -51,6 +51,8 @@ class Question(db.Model):
     db.session.delete(self)
     db.session.commit()
 
+    
+
   def format(self):
     return {
       'id': self.id,
