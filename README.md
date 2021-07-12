@@ -1,6 +1,6 @@
 # Trivia - Full Stack API Project
 
-The objective of this project is to learn how to structure plan, implement, and test an API. Udacity provides an initial prototype design. Completing this trivia app will help acquire the essential skills for enabling applications to communicate with other applications.
+The objective of this project is to learn how to structure plan, implement, document, and test an API. Udacity provides an initial prototype design. Completing this trivia app will help acquire the essential skills for enabling applications to communicate with other application.
 
 ## Getting Started
 
@@ -14,17 +14,17 @@ GET '/categories'
 
 GET '/questions'
 
-GET '/categories/<int:category\_id\>/questions'
+GET '/categories/${id}/questions'
 
 POST '/questions'
 
 POST '/quizzes'
 
-DELETE '/questions/<int:question\_id\>'
+DELETE '/questions/${id}'
 
 ```  
 
-## Examples of Endpoints
+## Endpoints Examples
 
 ```
 
@@ -33,12 +33,15 @@ GET '/categories'
 - Request Arguments: None
 - Returns: An object with a single key, categories, that contains an object of id: category_string key:value pairs. 
 {
-    'categories': { '1' : "Science",
-    '2' : "Art",
-    '3' : "Geography",
-    '4' : "History",
-    '5' : "Entertainment",
-    '6' : "Sports" }
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "success": true
 }
 ```
 
@@ -49,23 +52,33 @@ GET '/questions?page=${integer}'
 - Request Arguments: page - integer
 - Returns: An object with 10 paginated questions, total questions, object including all categories, and current category string
 {
-    'questions': [
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "currentCategory": null,
+    "questions": [
         {
-            'id': 1,
-            'question': 'This is a question',
-            'answer': 'This is an answer', 
-            'difficulty': 5,
-            'category': 2
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
         },
+        {
+            "answer": "One",
+            "category": 2,
+            "difficulty": 4,
+            "id": 18,
+            "question": "How many paintings did Van Gogh sell in his lifetime?"
+        }
     ],
-    'totalQuestions': 100,
-    'categories': { '1' : "Science",
-    '2' : "Art",
-    '3' : "Geography",
-    '4' : "History",
-    '5' : "Entertainment",
-    '6' : "Sports" },
-    'currentCategory': None
+    "success": true,
+    "totalQuestions": 18
 }
 
 ```
@@ -73,7 +86,7 @@ GET '/questions?page=${integer}'
 <img src = "https://user-images.githubusercontent.com/72150188/125356000-55c7d780-e36e-11eb-9209-502dfb7d41ba.png">
 </p>
 <p align = "center">
-Fig.1 - GET categories and GET questions frontend expected result
+Fig.1 - GET categories and GET questions frontend expected view
 </p>
 
 ```
@@ -83,17 +96,25 @@ GET '/categories/${id}/questions'
 - Request Arguments: id - integer
 - Returns: An object with questions for the specified category, total questions, and current category string 
 {
-    'questions': [
+    "currentCategory": "Sports",
+    "questions": [
         {
-            'id': 1,
-            'question': 'This is a question',
-            'answer': 'This is an answer', 
-            'difficulty': 5,
-            'category': 4
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
         },
+        {
+            "answer": "Uruguay",
+            "category": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        }
     ],
-    'totalQuestions': 100,
-    'currentCategory': None
+    "success": true,
+    "totalQuestions": 2
 }
 
 ```
@@ -101,7 +122,7 @@ GET '/categories/${id}/questions'
 <img src = "https://user-images.githubusercontent.com/72150188/125356302-b1926080-e36e-11eb-821e-1cb8bf1e2b04.png">
 </p>
 <p align = "center">
-Fig.1 - GET questions based on category frontend expected result
+Fig.2 - GET questions based on category frontend expected view
 </p>
 
 ```
@@ -109,19 +130,22 @@ POST '/questions'
 - Sends a post request in order to add a new question
 - Request Body: 
 {
-    'question':  'Heres a new question string',
-    'answer':  'Heres a new answer string',
-    'difficulty': 1,
-    'category': 3,
+    "question":  "some new question :)",
+    "answer":  "hahahahah",
+    "difficulty": 1,
+    "category": 3
 }
 - Returns: Does not return any new data
+{
+    "success": true
+}
 ```
 
 <p align = "center">
-<img src = "https://user-images.githubusercontent.com/72150188/125356200-8e67b100-e36e-11eb-9a9e-81ea5ac8571d.png">
+<img src = "https://user-images.githubusercontent.com/72150188/125362256-44cf9400-e377-11eb-9b49-a6405111ab30.png">
 </p>
 <p align = "center">
-Fig.1 - 4K Mountains Wallpaper
+Fig.3 - POST questions with a question, answer, difficulty and category frontend expected view
 </p>
 
 ```
@@ -129,29 +153,30 @@ POST '/questions'
 - Sends a post request in order to search for a specific question by search term 
 - Request Body: 
 {
-    'searchTerm': 'this is the term the user is looking for'
+    "searchTerm": "clay"
 }
 - Returns: any array of questions, a number of totalQuestions that met the search term and the current category string 
 {
-    'questions': [
+    "currentCategory": null,
+    "questions": [
         {
-            'id': 1,
-            'question': 'This is a question',
-            'answer': 'This is an answer', 
-            'difficulty': 5,
-            'category': 5
-        },
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        }
     ],
-    'totalQuestions': 100,
-    'currentCategory': 'Entertainment'
+    "success": true,
+    "totalQuestions": 1
 }
 ```
 
 <p align = "center">
-<img src = "">
+<img src = "https://user-images.githubusercontent.com/72150188/125362079-f3bfa000-e376-11eb-9e5c-e3c98ffe2b08.png">
 </p>
 <p align = "center">
-Fig.1 - some caption 
+Fig.4 - POST questions with a searchTerm frontend expected view
 </p>
 
 ```
@@ -160,34 +185,46 @@ POST '/quizzes'
 - Request Body: 
 {'previous_questions':  an array of question id's such as [1, 4, 20, 15]
 'quiz_category': a string of the current category }
+{
+    "previous_questions": [19],
+    "quiz_category": {"type":"Art", "id":"2"}
+
+}
 - Returns: a single new question object 
 {
-    'question': {
-        'id': 1,
-        'question': 'This is a question',
-        'answer': 'This is an answer', 
-        'difficulty': 5,
-        'category': 4
-    }
+    "question": {
+        "answer": "Escher",
+        "category": 2,
+        "difficulty": 1,
+        "id": 16,
+        "question": "Which Dutch graphic artist–initials M C was a creator of optical illusions?"
+    },
+    "success": true
 }
 ```
 
 <p align = "center">
-<img src = "https://user-images.githubusercontent.com/72150188/125356097-7132e280-e36e-11eb-8741-cd3b2fd7b86c.png">
+<img src = "https://user-images.githubusercontent.com/72150188/125361719-6419f180-e376-11eb-8d5d-7b61bfc84ad0.png">
 </p>
 <p align = "center">
-Fig.1 - 4K Mountains Wallpaper
+Fig.5 - POST quizzes frontend expected view
 </p>
 
 ```
 DELETE '/questions/${id}'
 - Deletes a specified question using the id of the question
 - Request Arguments: id - integer
-- Returns: Does not need to return anything besides the appropriate HTTP status code.
+- Returns: Does not need to return anything besides the appropriate HTTP status code optinally returens an id of the deleted question.
+{
+    "id": 14,
+    "success": true
+}
 ```
 <p align = "center">
-<img src = "">
+
+<img src = "https://user-images.githubusercontent.com/72150188/125361203-ac84df80-e375-11eb-95cf-5face81619eb.png">
+<img src = "https://user-images.githubusercontent.com/72150188/125361290-c9b9ae00-e375-11eb-9bc4-131c2dfb6ae6.png">
 </p>
 <p align = "center">
-Fig.1 - some caption 
+Fig.6 - DELETE questions based on id frontend expected view
 </p>
