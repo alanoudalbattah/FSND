@@ -1,6 +1,6 @@
 # Trivia - Full Stack API Project
 
-The objective of this project is to learn how to structure plan, implement, document, and test an API. Udacity provides an initial prototype design. Completing this trivia app will help acquire the essential skills for enabling applications to communicate with other application.
+The project's objective is to learn how to structure plan, implement, document, and test an API. Udacity provides an initial prototype design of the Trivia website. Trivia display questions both all questions and by category, delete questions, add questions and require that they include a question and an answer text, search for questions based on a text query string, and finally, play the quiz game, randomizing either all questions or within a specific category. Completing this trivia app will help acquire the essential skills for enabling applications to communicate with other application.
 
 ## Getting Started
 
